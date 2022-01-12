@@ -3,6 +3,6 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx:3306/worker2
+    url: jdbc:mysql://数据库地址:3306/worker2
     username: 123
     password: 123
