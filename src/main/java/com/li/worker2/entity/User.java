@@ -47,4 +47,7 @@ public class User implements Serializable {
 
     private String mail;
 
+    @TableField("enable")
+    private Integer enable;
+
 }
