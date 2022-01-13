@@ -1,16 +1,18 @@
 package com.li.worker2.service.impl;
 
 import com.li.worker2.entity.Master;
+import com.li.worker2.entity.User;
 import com.li.worker2.mapper.MasterMapper;
+import com.li.worker2.mapper.UserMapper;
 import com.li.worker2.service.MasterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.li.worker2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -25,6 +27,9 @@ import java.util.Properties;
 public class MasterServiceImpl extends ServiceImpl<MasterMapper, Master> implements MasterService {
     @Autowired
     private MasterMapper masterMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     private Properties props;
     private Session session;
@@ -69,5 +74,15 @@ public class MasterServiceImpl extends ServiceImpl<MasterMapper, Master> impleme
             System.out.println("邮箱发送出错");
             return "邮箱发送出错";
         }
+    }
+
+    @Override
+    public String getAllUser() {
+        List<User> users = userMapper.selectList(null);
+        StringBuilder sb = new StringBuilder();
+        for (User user : users) {
+            sb.append(user).append("\n");
+        }
+        return sb.toString();
     }
 }

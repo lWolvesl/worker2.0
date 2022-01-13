@@ -1,7 +1,7 @@
 package com.li.worker2.service;
 
-import com.li.worker2.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.li.worker2.entity.User;
 
 import java.util.List;
 
@@ -13,5 +13,12 @@ import java.util.List;
  * @author li
  * @since 2021-12-31
  */
-public interface UserService extends IService<User> {
+public interface SService extends IService<User> {
+    List<User> getAllEnable();
+
+    void run();
+
+    String start();
+
+    String stop();
 }

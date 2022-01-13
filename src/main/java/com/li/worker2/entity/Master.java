@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
-import java.util.Stack;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +28,7 @@ public class Master implements Serializable {
     @TableField("mailHost")
     private String mailHost;
 
-    @TableField("mailServer")
+    @TableId(value = "mailServer",type = IdType.AUTO)
     private String mailServer;
 
     @TableField("mailAuth")
@@ -37,4 +36,16 @@ public class Master implements Serializable {
 
     @TableField("mailPassword")
     private String mailPassword;
+
+    @TableField("mailRemind")
+    private String mailRemind;
+
+    @Override
+    public String toString() {
+        return "mailHost='" + mailHost + '\'' +
+                ", mailServer='" + mailServer + '\'' +
+                ", mailAuth='" + mailAuth + '\'' +
+                ", mailPassword='" + mailPassword + '\'' +
+                ", mailRemind='" + mailRemind;
+    }
 }

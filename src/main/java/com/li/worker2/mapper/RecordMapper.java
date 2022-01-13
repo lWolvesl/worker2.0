@@ -1,7 +1,7 @@
 package com.li.worker2.mapper;
 
-import com.li.worker2.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.li.worker2.entity.Record;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +15,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface RecordMapper extends BaseMapper<Record> {
 }

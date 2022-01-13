@@ -15,4 +15,6 @@ public interface MasterService extends IService<Master> {
     String iniMail();
 
     String sendMail(String email, String subject, String emailMsg);
+
+    String getAllUser();
 }
