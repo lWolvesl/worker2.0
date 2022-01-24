@@ -8,6 +8,8 @@ import com.li.worker2.entity.User;
 import com.li.worker2.mapper.MasterMapper;
 import com.li.worker2.mapper.RecordMapper;
 import com.li.worker2.service.RecordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class RecordServiceImpl extends ServiceImpl<MasterMapper, Master> impleme
     @Autowired
     private RecordMapper recordMapper;
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public void save(User user, Integer status, @Nullable String remarker) {
         Record record = new Record();
@@ -37,7 +41,7 @@ public class RecordServiceImpl extends ServiceImpl<MasterMapper, Master> impleme
         record.setRemaker(remarker);
         record.setMail(user.getMail());
         recordMapper.insert(record);
-        System.out.println(Time.getTimes() + "  记录保存成功");
+        logger.info("记录保存成功");
     }
 
     @Override

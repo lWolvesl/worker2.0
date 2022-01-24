@@ -4,6 +4,7 @@ package com.li.worker2.controller;
 import com.li.worker2.entity.Time;
 import com.li.worker2.service.MasterService;
 import com.li.worker2.service.RecordService;
+import com.li.worker2.service.impl.SServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,9 @@ public class MasterController {
 
     @Autowired
     public RecordService recordService;
+
+    @Autowired
+    public SServiceImpl service;
 
     private final String token = "12345679";
 

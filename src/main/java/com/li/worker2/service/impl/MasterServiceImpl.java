@@ -1,11 +1,14 @@
 package com.li.worker2.service.impl;
 
 import com.li.worker2.entity.Master;
+import com.li.worker2.entity.Time;
 import com.li.worker2.entity.User;
 import com.li.worker2.mapper.MasterMapper;
 import com.li.worker2.mapper.UserMapper;
 import com.li.worker2.service.MasterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,8 @@ import java.util.Properties;
 public class MasterServiceImpl extends ServiceImpl<MasterMapper, Master> implements MasterService {
     @Autowired
     private MasterMapper masterMapper;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserMapper userMapper;
@@ -67,11 +72,11 @@ public class MasterServiceImpl extends ServiceImpl<MasterMapper, Master> impleme
             message.setSubject(subject);
             message.setContent(emailMsg, "text/html;charset=utf-8");
             Transport.send(message);
-            System.out.println(email + "  邮件已发送");
+            logger.info(email + "  邮件发送成功");
             return "邮件发送成功";
         } catch (MessagingException e) {
             e.printStackTrace();
-            System.out.println("邮箱发送出错");
+            logger.info(email + "  邮箱发送出错");
             return "邮箱发送出错";
         }
     }

@@ -13,6 +13,7 @@ import com.li.worker2.mapper.UserMapper;
 import com.li.worker2.service.MasterService;
 import com.li.worker2.service.SService;
 import com.li.worker2.service.RecordService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
 
 /**
  * <p>
@@ -41,76 +46,72 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
     @Autowired
     private RecordService recordService;
 
-    private Thread thread;
-
     private Master master;
 
     HtmlPage home = null;
 
-    HtmlPage page = null;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    ExecutorService executor;
 
     @Override
     public List<User> getAllEnable() {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("enable","1");
+        wrapper.eq("enable", "1");
         return userMapper.selectList(wrapper);
     }
 
 
-    public void ini(){
-        if (master == null){
+    public void ini() {
+        if (master == null) {
             master = masterService.getOne(null);
         }
     }
 
     @Override
-    public String start(){
-        if (master == null){
+    public String start() {
+        if (master == null) {
             ini();
         }
-        if (thread != null) {
+        if (executor != null) {
             stop();
         }
-        System.out.println(Time.getTimes() + "  " + "服务启动成功");
-        thread = new Thread(this::run);
-        thread.start();
-        masterService.sendMail(master.getMailRemind(),"Punch in information","Punch service start");
+        executor = Executors.newFixedThreadPool(7);
+        executor.submit(this::run);
+        masterService.sendMail(master.getMailRemind(), "Punch in information", "Punch service start");
+        logger.info("服务启动成功");
         return Time.getTimes() + "  " + "服务启动成功";
     }
 
     @Override
-    public String stop(){
-        if (thread == null) {
+    public String stop() {
+        if (executor == null) {
             return Time.getTimes() + "  " + "服务尚未启动";
         }
         try {
-            thread.interrupt();
-            thread = null;
-            masterService.sendMail(master.getMailRemind(),"Punch in information","Punch service start");
-            System.out.println(Time.getTimes() + "  " + "服务停止成功");
+            executor.shutdownNow();
+            executor = null;
+            masterService.sendMail(master.getMailRemind(), "Punch in information", "Punch service stop");
+            logger.info("服务停止成功");
         } catch (Exception e) {
-            System.out.println(Time.getTimes() + "  " + "服务停止失败");
+            logger.info("服务停止失败");
         }
         return Time.getTimes() + "  " + "服务停止成功";
     }
 
     @Override
     public void run() {
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+
+        }
         while (true) {
             int time = Time.getTime();
             if (time >= 6 && time < 15) {
-                List<User> all = getAllEnable();
-                for (User user : all) {
-                    implement(user);
-                    System.out.println();
-                }
-                try {
-                    TimeUnit.HOURS.sleep(15);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                event();
             }
-            System.out.println("---------------------------------");
+            logger.info("检查时间");
             try {
                 TimeUnit.MINUTES.sleep(30);
             } catch (InterruptedException ignored) {
@@ -119,26 +120,38 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         }
     }
 
+    public void event() {
+        List<User> all = getAllEnable();
+        for (User user : all) {
+            executor.submit(() -> implement(user));
+        }
+        try {
+            TimeUnit.HOURS.sleep(15);
+        } catch (InterruptedException e) {
+
+        }
+    }
+
     public void implement(User user) {
         WebClient webClient = Time.createWebClient(user);
         if (confirm(webClient, user)) {
-            System.out.println(Time.getTimes() + "  " + user.getName() + "今日已打卡");
+            logger.info(user.getName() + "今日已打卡");
         } else {
             submit(user, webClient);
             if (confirm(webClient, user)) {
-                masterService.sendMail(user.getMail(), "Punch in information", "Punch success");
-                recordService.save(user,1,null);
+                masterService.sendMail(user.getMail(), "Punch success", "Punch success");
+                recordService.save(user, 1, null);
             } else {
-                masterService.sendMail(user.getMail(), "Punch in information", "Punch fail");
-                recordService.save(user,0,null);
+                masterService.sendMail(user.getMail(), "Punch success", "Punch fail");
+                recordService.save(user, 0, null);
             }
         }
     }
 
     public void submit(User user, WebClient webClient) {
-        System.out.println(Time.getTimes() + "  " + user.getName() + "打卡");
+        logger.info(user.getName() + "打卡");
         try {
-            home = (user.getStatus()==0?getHome_1(webClient):getHome_2(webClient));
+            home = (user.getStatus() == 0 ? webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099") : webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -258,63 +271,31 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
                 e.printStackTrace();
             }
 
-            try {
-                List<HtmlTextInput> telephone = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[21]/div/input");
-                telephone.get(0).setText(user.getPersonalPhone());
-
-                List<HtmlTextInput> parentName = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[22]/div/input");
-                parentName.get(0).setText(user.getEmergency());
-
-                List<HtmlTextInput> parentPhone = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[23]/div/input");
-                parentPhone.get(0).setText(user.getEmergencyPhone());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[26]/button");
+            List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[23]/button");
             button.get(0).click();
-            System.out.println(Time.getTimes() + "  " + user.getName() + "打卡成功");
+            logger.info(user.getName() + "打卡成功");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(Time.getTimes() + "  " + user.getName() + "打卡失败");
+            logger.info(user.getName() + "打卡失败");
         }
     }
 
     public boolean confirm(WebClient webClient, User user) {
-        System.out.println(Time.getTimes() + "  " + user.getName() + "检查打卡");
+        logger.info(user.getName() + "检查打卡");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String date = df.format(new Date());
         HtmlPage page = null;
         try {
-            page = user.getStatus()==0?getPage_1(webClient):getPage_2(webClient);
+            page = user.getStatus() == 0 ? webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099?op=getlist") : webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099?op=getlist");
         } catch (IOException e) {
             e.printStackTrace();
         }
         assert page != null;
         String s = page.asXml();
         if (s.contains("登陆: 身份验证")) {
-            System.out.println(Time.getTimes() + "  " + user.getName() + "服务器验证失败");
+            logger.info(user.getName() + "服务器验证失败");
             masterService.sendMail(user.getMail(), "Punch in information", "Cookie异常");
         }
         return s.contains(date);
-    }
-
-    private HtmlPage getHome_1(WebClient webClient) throws IOException {
-        page = webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099");
-        return page;
-    }
-
-    private HtmlPage getHome_2(WebClient webClient) throws IOException {
-        page = webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099");
-        return page;
-    }
-
-    private HtmlPage getPage_1(WebClient webClient) throws IOException {
-        page = webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099?op=getlist");
-        return page;
-    }
-    private HtmlPage getPage_2(WebClient webClient) throws IOException {
-        page = webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099?op=getlist");
-        return page;
     }
 }
