@@ -13,14 +13,6 @@ public class Time {
         return Integer.parseInt(sdf.format(new Date()));
     }
 
-    public static WebClient createWebClient(User user) {
-        WebClient webClient = new WebClient();
-        webClient.getOptions().setJavaScriptEnabled(false);
-        webClient.getOptions().setCssEnabled(false);
-        webClient.getCookieManager().setCookiesEnabled(true);
-        webClient.getCookieManager().addCookie(new Cookie("htu.g8n.cn", user.getCookieName(), user.getCookieValue()));
-        return webClient;
-    }
     public static String getTimes() {
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("yyyy-MM-dd HH:mm:ss.ms");

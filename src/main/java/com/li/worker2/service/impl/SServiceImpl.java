@@ -6,6 +6,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.li.worker2.entity.Master;
 import com.li.worker2.entity.Time;
 import com.li.worker2.entity.User;
@@ -47,8 +48,6 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
     private RecordService recordService;
 
     private Master master;
-
-    HtmlPage home = null;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -133,23 +132,26 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
     }
 
     public void implement(User user) {
-        WebClient webClient = Time.createWebClient(user);
+        WebClient webClient = createWebClient(user);
         if (confirm(webClient, user)) {
             logger.info(user.getName() + "今日已打卡");
         } else {
             submit(user, webClient);
             if (confirm(webClient, user)) {
+                logger.info(user + "打卡成功");
                 masterService.sendMail(user.getMail(), "Punch success", "Punch success");
                 recordService.save(user, 1, null);
             } else {
-                masterService.sendMail(user.getMail(), "Punch success", "Punch fail");
+                logger.info(user + "打卡失败");
+                masterService.sendMail(user.getMail(), "Punch fail", "Punch fail");
                 recordService.save(user, 0, null);
             }
         }
     }
 
-    public void submit(User user, WebClient webClient) {
+    public boolean submit(User user, WebClient webClient) {
         logger.info(user.getName() + "打卡");
+        HtmlPage home = null;
         try {
             home = (user.getStatus() == 0 ? webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099") : webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099"));
         } catch (IOException e) {
@@ -273,10 +275,10 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
             List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[23]/button");
             button.get(0).click();
-            logger.info(user.getName() + "打卡成功");
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.info(user.getName() + "打卡失败");
+            return false;
         }
     }
 
@@ -297,5 +299,14 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
             masterService.sendMail(user.getMail(), "Punch in information", "Cookie异常");
         }
         return s.contains(date);
+    }
+
+    public WebClient createWebClient(User user) {
+        WebClient webClient = new WebClient();
+        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getCookieManager().setCookiesEnabled(true);
+        webClient.getCookieManager().addCookie(new Cookie("htu.g8n.cn", user.getCookieName(), user.getCookieValue()));
+        return webClient;
     }
 }
