@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Sc {
 
-    String path = "/users/li/Desktop/";
+    String path = "/home/wolves/web/public/sc/";
 
     String pathImpl;
 
@@ -27,7 +27,7 @@ public class Sc {
 
         pathImpl = path + user.getStudentId() + ".png";
 
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         options.addArguments("--disable-infobars");

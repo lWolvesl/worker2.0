@@ -111,6 +111,8 @@ fc-list
 2、apt install chromium-browser
 安装linux版chrome
 
+使用cp命令将附带的chromedriver放入/usr/bin中
+
 3、参考数据库文件填写完整
 
 4、将数据库表中所需打卡用户的sc设置为1（即启用）
