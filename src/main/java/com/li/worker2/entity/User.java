@@ -43,14 +43,19 @@ public class User implements Serializable {
     private String location;
 
     @TableField("isInschool")
-    private Integer isInschool;
+    private Boolean isInschool;
 
     private String mail;
 
     @TableField("enable")
-    private Integer enable;
+    private Boolean enable;
 
-    @TableField("status")
-    private Integer status;
+    @TableField("host")
+    private String host;
 
+    @TableField("sc")
+    private Boolean sc;
+
+    @TableField("StudentID")
+    private String studentId;
 }

@@ -6,11 +6,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `master`;
 CREATE TABLE `master` (
-  `mailHost` varchar(255) NOT NULL,
-  `mailServer` varchar(255) NOT NULL,
-  `mailAuth` varchar(255) NOT NULL,
-  `mailPassword` varchar(255) NOT NULL,
-  `mailRemind` varchar(255) DEFAULT NULL,
+  `mailHost` varchar(255) NOT NULL, -- 邮箱服务器地址 例：smtp.163.com
+  `mailServer` varchar(255) NOT NULL, -- 管理员匹配邮箱地址
+  `mailAuth` varchar(255) NOT NULL, -- 默认为true
+  `mailPassword` varchar(255) NOT NULL, -- 邮箱密码（授权码）
+  `mailRemind` varchar(255) DEFAULT NULL, -- 管理员提示邮箱（个人邮箱）
   PRIMARY KEY (`mailServer`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -26,7 +26,7 @@ CREATE TABLE `record` (
   `remaker` varchar(255) DEFAULT NULL,
   `recordID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`recordID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=211 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -42,8 +42,10 @@ CREATE TABLE `user` (
   `location` varchar(255) NOT NULL,
   `isInschool` int(11) NOT NULL,
   `mail` varchar(255) NOT NULL,
-  `enable` int(11) NOT NULL DEFAULT '1',
-  `status` int(11) NOT NULL DEFAULT '0',
+  `enable` int(11) NOT NULL DEFAULT '1', -- 是否启用此用户的自动打卡
+  `sc` int(11) NOT NULL DEFAULT '0', -- 是否启用截图功能
+  `host` varchar(255) NOT NULL, -- 打卡页面地址
+  `StudentID` varchar(255) NOT NULL, -- 学号
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

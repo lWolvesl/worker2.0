@@ -1,5 +1,9 @@
 ## 移动学工自动打卡
 
+## ## 更新日志
+
+<font color="red">2022-01-28 现已支持部分学院打卡后自动截图！</font>
+
 -   简介：河南师范大学移动学工打卡
 
     >   实现自动打卡
@@ -12,9 +16,9 @@
 
 ### 一、数据库
 
-![截屏2022-01-12 11.35.51](https://typroa-wolves.oss-cn-hangzhou.aliyuncs.com/img-li/%E6%88%AA%E5%B1%8F2022-01-12%2011.35.51.png)
+使用数据库文件将数据库结构导入至mysql中
 
-![截屏2022-01-12 11.37.12](https://typroa-wolves.oss-cn-hangzhou.aliyuncs.com/img-li/%E6%88%AA%E5%B1%8F2022-01-12%2011.37.12.png)
+将数据库文件中的内容填写完整，具体参考以下简介和(.sql)文件中的描述
 
 注意修改数据库地址及账户密码（MySql）
 
@@ -72,11 +76,45 @@
 
 #### 3、启动、停止
 
-- 输入`localhost:8989/start`启动服务
+- 输入`localhost:8989/start?key = 12345679`启动服务
 
 ![截屏2022-01-12 11.43.40](https://typroa-wolves.oss-cn-hangzhou.aliyuncs.com/img-li/%E6%88%AA%E5%B1%8F2022-01-12%2011.43.40.png)
 
-- 输入`http://localhost:8989/stop`停止服务
+- 输入`http://localhost:8989/stop`?key = 12345679停止服务
 - ![截屏2022-01-12 11.44.41](https://typroa-wolves.oss-cn-hangzhou.aliyuncs.com/img-li/%E6%88%AA%E5%B1%8F2022-01-12%2011.44.41.png)
 
 - 服务启动成功后将在6点-11点自动完成数据库中所有人的打卡任务
+
+### 截图功能
+
+- 更新于 2022-01-28
+
+注：本此更新截图功能介绍为linux系统
+
+##### 1、首先于linux系统中加入中文字体防止截图乱码
+
+```
+# 创建中文字体目录
+mkdir -p /usr/share/fonts/chinese/
+
+# 将字体文件拷贝到中文字体目录中
+cp songti.ttf /usr/share/fonts/chinese/
+
+cd /usr/share/fonts/chinese/
+
+# 为刚加入的字体设置缓存使之有效
+fc-cache -fv
+
+# 查看系统中的字体
+fc-list
+```
+
+2、参考数据库文件填写完整
+
+3、将数据库表中所需打卡用户的sc设置为1（即启用）
+
+3、设置(src/main/java/com/li/worker2/service/Impl/sc.java)中的文件保存路径path
+
+![截屏2022-01-28 12.15.19](https://typroa-wolves.oss-cn-hangzhou.aliyuncs.com/img-li/%E6%88%AA%E5%B1%8F2022-01-28%2012.15.19.png)
+
+再启用服务时即可自动截图并打上学号姓名的水印

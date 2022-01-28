@@ -8,12 +8,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.li.worker2.entity.Master;
+import com.li.worker2.entity.OwnRandom;
 import com.li.worker2.entity.Time;
 import com.li.worker2.entity.User;
 import com.li.worker2.mapper.UserMapper;
 import com.li.worker2.service.MasterService;
-import com.li.worker2.service.SService;
 import com.li.worker2.service.RecordService;
+import com.li.worker2.service.SService;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
 
 /**
  * <p>
@@ -108,11 +108,11 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         while (true) {
             int time = Time.getTime();
             if (time >= 6 && time < 15) {
+                logger.info(Time.getDate()+"打卡服务启动");
                 event();
             }
-            logger.info("检查时间");
             try {
-                TimeUnit.MINUTES.sleep(30);
+                TimeUnit.MINUTES.sleep(36);
             } catch (InterruptedException ignored) {
 
             }
@@ -121,28 +121,35 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
     public void event() {
         List<User> all = getAllEnable();
+        try {
+            TimeUnit.SECONDS.sleep(OwnRandom.getTen());
+        } catch (InterruptedException ignored) {
+
+        }
         for (User user : all) {
-            executor.submit(() -> implement(user));
+            executor.submit(() -> {
+                implement(user);
+            });
         }
         try {
             TimeUnit.HOURS.sleep(15);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
 
         }
     }
 
     public void implement(User user) {
         WebClient webClient = createWebClient(user);
-        if (confirm(webClient, user)) {
+        if (!confirm(webClient, user)) {
             logger.info(user.getName() + "今日已打卡");
         } else {
             submit(user, webClient);
             if (confirm(webClient, user)) {
-                logger.info(user + "打卡成功");
+                logger.info(user.getName() + "打卡成功");
                 masterService.sendMail(user.getMail(), "Punch success", "Punch success");
                 recordService.save(user, 1, null);
             } else {
-                logger.info(user + "打卡失败");
+                logger.info(user.getName() + "打卡失败");
                 masterService.sendMail(user.getMail(), "Punch fail", "Punch fail");
                 recordService.save(user, 0, null);
             }
@@ -153,7 +160,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         logger.info(user.getName() + "打卡");
         HtmlPage home = null;
         try {
-            home = (user.getStatus() == 0 ? webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099") : webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099"));
+            home = webClient.getPage(user.getHost());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,7 +170,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
                 List<HtmlTextInput> location = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[1]/div/input");
                 location.get(0).setText(user.getLocation());
 
-                String isInSchool = 1 == user.getIsInschool() ? "/html/body/div[1]/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[2]/div/label[1]/input" : "/html/body/div[1]/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[2]/div/label[2]/input";
+                String isInSchool = user.getIsInschool() ? "/html/body/div[1]/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[2]/div/label[1]/input" : "/html/body/div[1]/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[2]/div/label[2]/input";
                 List<HtmlRadioButtonInput> isInSchoolList = home.getByXPath(isInSchool);
                 isInSchoolList.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
@@ -275,6 +282,14 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
             List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[23]/button");
             button.get(0).click();
+            if (user.getSc()) {
+                try {
+                    new Sc().Screen(user);
+                    logger.info("图片保存成功");
+                } catch (Exception e) {
+                    logger.info(e.getMessage());
+                }
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,7 +303,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         String date = df.format(new Date());
         HtmlPage page = null;
         try {
-            page = user.getStatus() == 0 ? webClient.getPage("https://htu.g8n.cn/student/course/31030/profiles/6099?op=getlist") : webClient.getPage("https://htu.g8n.cn/student/course/31033/profiles/6099?op=getlist");
+            page = webClient.getPage(user.getHost() + "?op=getlist");
         } catch (IOException e) {
             e.printStackTrace();
         }
