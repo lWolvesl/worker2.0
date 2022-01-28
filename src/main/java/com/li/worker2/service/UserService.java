@@ -1,9 +1,7 @@
 package com.li.worker2.service;
 
-import com.li.worker2.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
+import com.li.worker2.entity.User;
 
 /**
  * <p>

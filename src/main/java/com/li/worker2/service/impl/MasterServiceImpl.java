@@ -1,11 +1,11 @@
 package com.li.worker2.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.li.worker2.entity.Master;
 import com.li.worker2.entity.User;
 import com.li.worker2.mapper.MasterMapper;
 import com.li.worker2.mapper.UserMapper;
 import com.li.worker2.service.MasterService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

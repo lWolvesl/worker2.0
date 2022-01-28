@@ -3,6 +3,9 @@ package com.li.worker2.entity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author li
+ */
 public class Time {
     public static int getTime() {
         SimpleDateFormat sdf = new SimpleDateFormat();

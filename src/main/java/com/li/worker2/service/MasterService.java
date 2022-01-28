@@ -1,7 +1,7 @@
 package com.li.worker2.service;
 
-import com.li.worker2.entity.Master;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.li.worker2.entity.Master;
 
 /**
  * <p>

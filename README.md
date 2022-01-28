@@ -108,12 +108,14 @@ fc-cache -fv
 # 查看系统中的字体
 fc-list
 ```
+2、apt install chromium-browser
+安装linux版chrome
 
-2、参考数据库文件填写完整
+3、参考数据库文件填写完整
 
-3、将数据库表中所需打卡用户的sc设置为1（即启用）
+4、将数据库表中所需打卡用户的sc设置为1（即启用）
 
-3、设置(src/main/java/com/li/worker2/service/Impl/sc.java)中的文件保存路径path
+5、设置(src/main/java/com/li/worker2/service/Impl/sc.java)中的文件保存路径path
 
 ![截屏2022-01-28 12.15.19](https://typroa-wolves.oss-cn-hangzhou.aliyuncs.com/img-li/%E6%88%AA%E5%B1%8F2022-01-28%2012.15.19.png)
 
