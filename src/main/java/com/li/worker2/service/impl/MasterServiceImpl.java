@@ -70,7 +70,7 @@ public class MasterServiceImpl extends ServiceImpl<MasterMapper, Master> impleme
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject(subject);
             message.setContent(emailMsg, "text/html;charset=utf-8");
-            //Transport.send(message);
+            Transport.send(message);
             logger.info(email + "  邮件发送成功");
             return "邮件发送成功";
         } catch (MessagingException e) {

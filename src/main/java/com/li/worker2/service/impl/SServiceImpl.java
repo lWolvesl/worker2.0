@@ -102,7 +102,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
     public void run() {
         try {
             TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
 
         }
         while (true) {
@@ -140,7 +140,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
     public void implement(User user) {
         WebClient webClient = createWebClient(user);
-        if (!confirm(webClient, user)) {
+        if (confirm(webClient, user)) {
             logger.info(user.getName() + "今日已打卡");
         } else {
             submit(user, webClient);
