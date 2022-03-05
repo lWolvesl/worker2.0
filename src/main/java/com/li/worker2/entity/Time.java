@@ -19,6 +19,12 @@ public class Time {
         return sdf.format(new Date());
     }
 
+    public static int getSecond(){
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("mm");
+        return Integer.parseInt(sdf.format(new Date()));
+    }
+
     public static String getDate(){
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("yyyy-MM-dd");
