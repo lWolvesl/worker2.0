@@ -52,6 +52,4 @@ public class RecordServiceImpl extends ServiceImpl<MasterMapper, Master> impleme
         }
         return sb.toString();
     }
-
-
 }
