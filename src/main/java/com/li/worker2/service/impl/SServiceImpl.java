@@ -108,7 +108,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         while (true) {
             int time = Time.getTime();
             int second = Time.getSecond();
-            if ((time >= 11 && second > 30) || time > 12) {
+            if (time >= 11 && second > 30) {
                 logger.info(Time.getDate() + "打卡服务启动");
                 event();
             }
@@ -169,7 +169,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         try {
             try {
                 List<HtmlTextInput> location = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[1]/div/input");
-                location.get(0).setText(user.getIsInschool() ? "河南省,新乡市,牧野区,求知路河南师范大学(东区)|35.32802,113.92183" : user.getLocation());
+                location.get(0).setText(user.getIsInschool()?"河南省,新乡市,牧野区,求知路河南师范大学(东区)|35.32802,113.92183":user.getLocation());
             } catch (Exception ignored) {
 
             }
