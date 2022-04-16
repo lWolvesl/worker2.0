@@ -75,7 +75,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         if (executor != null) {
             stop();
         }
-        executor = Executors.newFixedThreadPool(7);
+        executor = Executors.newFixedThreadPool(12);
         executor.submit(this::run);
         masterService.sendMail(master.getMailRemind(), "Punch in information", "Punch service start");
         logger.info("服务启动成功");
@@ -113,7 +113,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
                 event();
             }
             try {
-                TimeUnit.MINUTES.sleep(36);
+                TimeUnit.MINUTES.sleep(30);
             } catch (InterruptedException ignored) {
 
             }
