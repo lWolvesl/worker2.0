@@ -18,6 +18,8 @@ public interface SService extends IService<User> {
 
     void run();
 
+    void event();
+
     String start();
 
     String stop();

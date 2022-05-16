@@ -100,16 +100,16 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
     @Override
     public void run() {
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException ignored) {
-
-        }
         while (true) {
             int time = Time.getTime();
             int second = Time.getSecond();
             if (time >= 11 && second > 30) {
                 logger.info(Time.getDate() + "打卡服务启动");
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException ignored) {
+
+                }
                 event();
             }
             try {
@@ -120,6 +120,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         }
     }
 
+    @Override
     public void event() {
         List<User> all = getAllEnable();
         try {
@@ -131,11 +132,6 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
             executor.submit(() -> {
                 implement(user);
             });
-        }
-        try {
-            TimeUnit.HOURS.sleep(15);
-        } catch (InterruptedException ignored) {
-
         }
     }
 
