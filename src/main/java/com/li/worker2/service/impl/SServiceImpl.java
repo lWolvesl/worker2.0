@@ -103,7 +103,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         while (true) {
             int time = Time.getTime();
             int second = Time.getSecond();
-            if ((time == 11 && second > 30) || time > 11) {
+            if (time >= 6 && time < 11) {
                 logger.info(Time.getDate() + "打卡服务启动");
                 try {
                     TimeUnit.SECONDS.sleep(5);
