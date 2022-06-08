@@ -111,6 +111,11 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
                 }
                 event();
+                try {
+                    TimeUnit.HOURS.sleep(18);
+                } catch (InterruptedException ignored) {
+
+                }
             }
             try {
                 TimeUnit.MINUTES.sleep(30);
