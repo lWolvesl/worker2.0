@@ -39,6 +39,12 @@ public class Master implements Serializable {
     @TableField("mailRemind")
     private String mailRemind;
 
+    @TableField("startTime")
+    private int start;
+
+    @TableField("endTime")
+    private int end;
+
     @Override
     public String toString() {
         return "mailHost='" + mailHost + '\'' +

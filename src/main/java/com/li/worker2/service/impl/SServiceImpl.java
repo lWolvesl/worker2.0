@@ -79,6 +79,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         executor.submit(this::run);
         masterService.sendMail(master.getMailRemind(), "Punch in information", "Punch service start");
         logger.info("服务启动成功");
+        logger.info("系统将于"+master.getStart()+"点至"+master.getEnd()+"点之间打卡");
         return Time.getTimes() + "  " + "服务启动成功";
     }
 
@@ -103,7 +104,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
         while (true) {
             int time = Time.getTime();
             int second = Time.getSecond();
-            if (time >= 6 && time < 11) {
+            if (time >= master.getStart() && time < master.getEnd()) {
                 logger.info(Time.getDate() + "打卡服务启动");
                 try {
                     TimeUnit.SECONDS.sleep(5);

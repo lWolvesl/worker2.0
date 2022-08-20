@@ -29,8 +29,11 @@ public class ServiceController {
         return SService.start();
     }
 
-    @RequestMapping("/head")
-    public String head() {
+    @RequestMapping("/hand")
+    public String head(@RequestParam String key) {
+        if (!token.equals(key)) {
+            return Time.getTimes() + "  " + "key错误";
+        }
         SService.event();
         logger.info("手动打卡启动");
         return Time.getTimes() + "手动打卡启动成功";
