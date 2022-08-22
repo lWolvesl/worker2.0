@@ -59,4 +59,7 @@ public class User implements Serializable {
 
     @TableField("StudentID")
     private String studentId;
+
+    @TableField("schoolLocation")
+    private String schoolLocation;
 }
