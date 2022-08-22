@@ -1,3 +1,19 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : server
+ Source Server Type    : MySQL
+ Source Server Version : 80029
+ Source Host           : www.server.wolves.top:13306
+ Source Schema         : worker2
+
+ Target Server Type    : MySQL
+ Target Server Version : 80029
+ File Encoding         : 65001
+
+ Date: 22/08/2022 17:09:55
+*/
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -6,13 +22,15 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `master`;
 CREATE TABLE `master` (
-  `mailHost` varchar(255) NOT NULL, -- 邮箱服务器地址 例：smtp.163.com
-  `mailServer` varchar(255) NOT NULL, -- 管理员匹配邮箱地址
-  `mailAuth` varchar(255) NOT NULL, -- 默认为true
-  `mailPassword` varchar(255) NOT NULL, -- 邮箱密码（授权码）
-  `mailRemind` varchar(255) DEFAULT NULL, -- 管理员提示邮箱（个人邮箱）
+  `mailHost` varchar(255) NOT NULL,
+  `mailServer` varchar(255) NOT NULL,
+  `mailAuth` varchar(255) NOT NULL,
+  `mailPassword` varchar(255) NOT NULL,
+  `mailRemind` varchar(255) DEFAULT NULL,
+  `startTime` int DEFAULT NULL,
+  `endTime` int DEFAULT NULL,
   PRIMARY KEY (`mailServer`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
 -- Table structure for record
@@ -22,11 +40,11 @@ CREATE TABLE `record` (
   `name` varchar(255) NOT NULL,
   `mail` varchar(255) NOT NULL,
   `time` datetime NOT NULL,
-  `status` int(255) NOT NULL,
+  `status` int NOT NULL,
   `remaker` varchar(255) DEFAULT NULL,
-  `recordID` int(11) NOT NULL AUTO_INCREMENT,
+  `recordID` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`recordID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=211 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=523 DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
 -- Table structure for user
@@ -40,13 +58,14 @@ CREATE TABLE `user` (
   `emergency` varchar(255) NOT NULL,
   `emergencyPhone` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
-  `isInschool` int(11) NOT NULL,
+  `isInschool` int NOT NULL,
   `mail` varchar(255) NOT NULL,
-  `enable` int(11) NOT NULL DEFAULT '1', -- 是否启用此用户的自动打卡
-  `sc` int(11) NOT NULL DEFAULT '0', -- 是否启用截图功能
-  `host` varchar(255) NOT NULL, -- 打卡页面地址
-  `StudentID` varchar(255) NOT NULL, -- 学号
+  `enable` int NOT NULL DEFAULT '1',
+  `sc` int NOT NULL DEFAULT '0',
+  `host` varchar(255) NOT NULL,
+  `StudentID` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8_general_ci DEFAULT NULL,
+  `schoolLocation` varchar(255) DEFAULT '河南省,新乡市,牧野区,求知路河南师范大学(东区)|35.32802,113.92183',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 SET FOREIGN_KEY_CHECKS = 1;

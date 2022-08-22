@@ -6,9 +6,17 @@
     >   可以自定义打卡区间
     >
     >   可自定义邮件
-
+- 项目地址
+  - ```https://gitee.com/lWolvesl/worker2.0```
+  - ```https://github.com/lWolvesl/worker2.0```
 
 ## # 更新日志
+<font color="#e691e">2022-08-22 阶段性版本更新</font>
+- 支持到2022-08-22移动学工刚修改到打卡页面
+- 开始支持校区位置设置（数据库结构支持）
+- 支持数据库一键修改时间（master表中）
+- 支持手动启动打卡 ```/hand?key=xxx```
+
 <font color="#d2691e">2022-03-05 打卡时间已更新为每日11：30开始</font>
 
 <font color="gree">2022-02-21 支持到2022-02-21的移动学工打卡页面</font>
