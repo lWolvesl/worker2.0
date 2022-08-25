@@ -103,7 +103,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
     public void run() {
         while (true) {
             int time = Time.getTime();
-            int second = Time.getSecond();
+            master = masterService.getOne(null);
             if (time >= master.getStart() && time < master.getEnd()) {
                 logger.info(Time.getDate() + "打卡服务启动");
                 try {
@@ -112,11 +112,6 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
 
                 }
                 event();
-                try {
-                    TimeUnit.HOURS.sleep(18);
-                } catch (InterruptedException ignored) {
-
-                }
             }
             try {
                 TimeUnit.MINUTES.sleep(30);
@@ -185,7 +180,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
             }
 
             try {
-                String locationDenger = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[3]/div/label[2]/input";
+                String locationDenger = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[3]/div/label[1]/input";
                 List<HtmlRadioButtonInput> locationDengerList = home.getByXPath(locationDenger);
                 locationDengerList.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
@@ -193,7 +188,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
             }
 
             try {
-                String isVaccines = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[4]/div/label[1]/input";
+                String isVaccines = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[4]/div/label[3]/input";
                 List<HtmlRadioButtonInput> vaccinesList = home.getByXPath(isVaccines);
                 vaccinesList.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
@@ -201,65 +196,61 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
             }
 
             try {
-                List<HtmlRadioButtonInput> twice = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[5]/div/label[1]/input");
-                twice.get(0).setAttribute("checked", "checked");
+                String isVaccines = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[5]/div/label[1]/input";
+                List<HtmlRadioButtonInput> vaccinesList = home.getByXPath(isVaccines);
+                vaccinesList.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             try {
-                List<HtmlTextInput> temperature = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[6]/div/input");
-                temperature.get(0).setText("36.5");
+                String temperature = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[6]/div/label[1]/input";
+                List<HtmlRadioButtonInput> vaccinesList = home.getByXPath(temperature);
+                vaccinesList.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             try {
-                List<HtmlRadioButtonInput> symptomList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[7]/div/label[2]/input");
+                List<HtmlRadioButtonInput> today = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[7]/div/label[2]/input");
+                today.get(0).setAttribute("checked", "checked");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                List<HtmlRadioButtonInput> symptomList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[8]/div/label[2]/input");
                 symptomList.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             try {
-                List<HtmlRadioButtonInput> feverList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[8]/div/label[2]/input");
+                List<HtmlRadioButtonInput> location = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[9]/div/label[2]/input");
+                location.get(0).setAttribute("checked", "checked");
+
+                List<HtmlRadioButtonInput> feverList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[10]/div/label[1]/input");
                 feverList.get(0).setAttribute("checked", "checked");
 
-                List<HtmlRadioButtonInput> diagnosisList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[9]/div/label[2]/input");
+                List<HtmlRadioButtonInput> diagnosisList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[11]/div/label[2]/input");
                 diagnosisList.get(0).setAttribute("checked", "checked");
 
-                List<HtmlRadioButtonInput> suspectedList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[10]/div/label[2]/input");
+                List<HtmlRadioButtonInput> suspectedList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[12]/div/label[2]/input");
                 suspectedList.get(0).setAttribute("checked", "checked");
 
-                if (!user.getIsInschool()) {
-                    List<HtmlRadioButtonInput> beenList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[12]/div/label[2]/input");
+                {
+                    List<HtmlRadioButtonInput> beenList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[13]/div/label[1]/input");
                     beenList.get(0).setAttribute("checked", "checked");
 
-                    List<HtmlRadioButtonInput> closeContactList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[13]/div/label[2]/input");
+                    List<HtmlRadioButtonInput> closeContactList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[14]/div/label[1]/input");
                     closeContactList.get(0).setAttribute("checked", "checked");
-
-                    List<HtmlRadioButtonInput> stayList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[14]/div/label[2]/input");
-                    stayList.get(0).setAttribute("checked", "checked");
-
-                    List<HtmlRadioButtonInput> parentsList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[15]/div/label[2]/input");
-                    parentsList.get(0).setAttribute("checked", "checked");
-
-                    List<HtmlRadioButtonInput> relativesList = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[16]/div/label[2]/input");
-                    relativesList.get(0).setAttribute("checked", "checked");
-
-                    String dayStateX = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[17]/div/label[1]/input";
-                    List<HtmlRadioButtonInput> dayStateList = home.getByXPath(dayStateX);
-                    dayStateList.get(0).setAttribute("checked", "checked");
-                } else {
-                    String dayStateX = "/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[17]/div/label[1]/input";
-                    List<HtmlRadioButtonInput> dayStateList = home.getByXPath(dayStateX);
-                    dayStateList.get(0).setAttribute("checked", "checked");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[20]/button");
+            List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[17]/button");
             button.get(0).click();
             if (user.getSc()) {
                 try {
