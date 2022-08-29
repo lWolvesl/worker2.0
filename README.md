@@ -11,6 +11,10 @@
   - ```https://github.com/lWolvesl/worker2.0```
 
 ## # 更新日志
+<font color="#ea9">2022-08-30 支持到2022-08-30的移动学工打卡页面</font>
+
+<font color="#e69">2022-08-28 支持到2022-08-28的移动学工打卡页面</font>
+
 <font color="#e69e">2022-08-25 支持到2022-08-25的移动学工打卡页面</font>
 
 <font color="#e691e">2022-08-22 阶段性版本更新</font>

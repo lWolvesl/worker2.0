@@ -260,8 +260,16 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
                 e.printStackTrace();
             }
 
-            List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[16]/button");
+            try {
+                List<HtmlRadioButtonInput> confirm = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[15]/div/label/input");
+                confirm.get(0).setAttribute("checked", "checked");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            List<HtmlButton> button = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[17]/button");
             button.get(0).click();
+
             if (user.getSc()) {
                 try {
                     new Sc().Screen(user);
