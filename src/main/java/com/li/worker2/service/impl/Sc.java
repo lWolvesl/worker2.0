@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Sc {
 
-    String path = "/home/wolves/web/public/sc/";
+    String path = "/app/sc";
 
     String pathImpl;
 
