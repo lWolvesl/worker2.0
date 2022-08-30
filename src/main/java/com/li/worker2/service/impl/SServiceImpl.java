@@ -2,10 +2,7 @@ package com.li.worker2.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.li.worker2.entity.Master;
 import com.li.worker2.entity.OwnRandom;
@@ -261,7 +258,7 @@ public class SServiceImpl extends com.baomidou.mybatisplus.extension.service.imp
             }
 
             try {
-                List<HtmlRadioButtonInput> confirm = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[15]/div/label/input");
+                List<HtmlCheckBoxInput> confirm = home.getByXPath("/html/body/div/div/div[3]/div/div[2]/div/div/div/div[1]/form/div[15]/div/label/input");
                 confirm.get(0).setAttribute("checked", "checked");
             } catch (Exception e) {
                 e.printStackTrace();
