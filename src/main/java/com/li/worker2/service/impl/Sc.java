@@ -28,6 +28,8 @@ public class Sc {
         pathImpl = path + user.getStudentId() + ".png";
 
         System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+        System.setProperty("webdriver.chrome.whitelistedIps", "");
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         options.addArguments("--disable-infobars");
@@ -37,6 +39,7 @@ public class Sc {
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--hide-scrollbars");
         options.addArguments("--window-size=450,800");
+        options.addArguments("--verbose");
         Cookie cookie = new Cookie(user.getCookieName(), user.getCookieValue());
 
         WebDriver driver = new ChromeDriver(options);
