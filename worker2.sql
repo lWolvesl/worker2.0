@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : server
+ Source Server         : tx
  Source Server Type    : MySQL
- Source Server Version : 80029
- Source Host           : www.server.wolves.top:13306
+ Source Server Version : 80030
+ Source Host           : tx.wolves.top:3306
  Source Schema         : worker2
 
  Target Server Type    : MySQL
- Target Server Version : 80029
+ Target Server Version : 80030
  File Encoding         : 65001
 
- Date: 22/08/2022 17:09:55
+ Date: 16/12/2022 11:07:02
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `record` (
   `remaker` varchar(255) DEFAULT NULL,
   `recordID` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`recordID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=523 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=1349 DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
 -- Table structure for user
@@ -63,7 +63,7 @@ CREATE TABLE `user` (
   `enable` int NOT NULL DEFAULT '1',
   `sc` int NOT NULL DEFAULT '0',
   `host` varchar(255) NOT NULL,
-  `StudentID` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8_general_ci DEFAULT NULL,
+  `StudentID` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `schoolLocation` varchar(255) DEFAULT '河南省,新乡市,牧野区,求知路河南师范大学(东区)|35.32802,113.92183',
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
